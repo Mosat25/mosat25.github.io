@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Portafolio - Desarrollador Web</title>
+    
+    <!-- Cargando Tailwind CSS desde CDN para estilos rápidos y responsivos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Cargando iconos de FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Configuración personalizada de Tailwind (opcional, para temas) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6', // Azul claro
+                        secondary: '#1e293b', // Gris oscuro
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Animación suave para la aparición del contenido */
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Retrasos para elementos específicos */
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col antialiased">
+
+    <!-- Navegación -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-primary">&lt;DevName /&gt;</span>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="#sobre-mi" class="text-gray-600 hover:text-primary transition-colors">Sobre mí</a>
+                    <a href="#proyectos" class="text-gray-600 hover:text-primary transition-colors">Proyectos</a>
+                    <a href="#contacto" class="text-gray-600 hover:text-primary transition-colors">Contacto</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sección Hero (Principal) -->
+    <main class="flex-grow flex items-center justify-center pt-16 pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-blue-50 to-white">
+        <div class="max-w-3xl text-center fade-in">
+            <!-- Imagen de perfil (puedes reemplazar la URL) -->
+            <img src="https://placehold.co/150x150/3b82f6/white?text=Yo" alt="Mi Foto" class="w-32 h-32 mx-auto rounded-full shadow-lg border-4 border-white mb-6 object-cover">
+            
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-secondary tracking-tight mb-4 fade-in delay-100">
+                ¡Hola! Soy <span class="text-primary">Tu Nombre</span>
+            </h1>
+            
+            <p class="text-lg sm:text-xl text-gray-600 mb-8 fade-in delay-200 leading-relaxed">
+                Desarrollador web apasionado por crear experiencias digitales increíbles. Especializado en frontend y aprendiendo constantemente nuevas tecnologías.
+            </p>
+            
+            <div class="flex justify-center space-x-4 fade-in delay-300">
+                <a href="#proyectos" class="px-6 py-3 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-transform transform hover:-translate-y-1">
+                    Ver mis proyectos
+                </a>
+                <a href="#contacto" class="px-6 py-3 bg-white text-gray-700 font-semibold rounded-lg shadow-md border border-gray-200 hover:bg-gray-50 transition-transform transform hover:-translate-y-1">
+                    Contactar
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Sección de Proyectos (Ejemplos) -->
+    <section id="proyectos" class="py-20 bg-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center text-secondary mb-12">Mis Proyectos Recientes</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Tarjeta de Proyecto 1 -->
+                <div class="bg-gray-50 rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <img src="https://placehold.co/600x300/1e293b/white?text=Proyecto+1" alt="Proyecto 1" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Aplicación de Tareas</h3>
+                        <p class="text-gray-600 mb-4">Una todo-list interactiva construida con HTML, CSS y JavaScript puro. Permite gestionar estado local.</p>
+                        <div class="flex gap-2 mb-4">
+                            <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded">HTML</span>
+                            <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-semibold rounded">JS</span>
+                        </div>
+                        <a href="#" class="text-primary hover:underline text-sm font-medium">Ver código en GitHub &rarr;</a>
+                    </div>
+                </div>
+
+                <!-- Tarjeta de Proyecto 2 -->
+                <div class="bg-gray-50 rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <img src="https://placehold.co/600x300/1e293b/white?text=Proyecto+2" alt="Proyecto 2" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Clon de Landing Page</h3>
+                        <p class="text-gray-600 mb-4">Diseño responsivo replicando la página principal de una empresa conocida usando Tailwind CSS.</p>
+                        <div class="flex gap-2 mb-4">
+                            <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded">CSS</span>
+                            <span class="px-2 py-1 bg-teal-100 text-teal-700 text-xs font-semibold rounded">Tailwind</span>
+                        </div>
+                        <a href="#" class="text-primary hover:underline text-sm font-medium">Ver demo en vivo &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Contacto -->
+    <footer id="contacto" class="bg-secondary text-white py-12">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-2xl font-bold mb-6">¿Trabajamos juntos?</h2>
+            <p class="text-gray-400 mb-8 max-w-xl mx-auto">
+                Actualmente estoy abierto a nuevas oportunidades. Si tienes una pregunta o simplemente quieres saludar, intentaré responderte lo antes posible.
+            </p>
+            
+            <div class="flex justify-center space-x-6 mb-8">
+                <!-- Enlaces a redes (reemplaza los # con tus links) -->
+                <a href="#" class="text-gray-400 hover:text-white transition-colors transform hover:scale-110" aria-label="GitHub">
+                    <i class="fab fa-github text-3xl"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors transform hover:scale-110" aria-label="LinkedIn">
+                    <i class="fab fa-linkedin text-3xl"></i>
+                </a>
+                <a href="mailto:tuemail@ejemplo.com" class="text-gray-400 hover:text-red-400 transition-colors transform hover:scale-110" aria-label="Email">
+                    <i class="fas fa-envelope text-3xl"></i>
+                </a>
+            </div>
+            
+            <div class="border-t border-gray-700 pt-8 text-sm text-gray-500">
+                <p>&copy; <span id="year"></span> Tu Nombre. Construido para GitHub Pages.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Script simple para actualizar el año en el footer automáticamente
+        document.getElementById('year').textContent = new Date().getFullYear();
+        
+        // Aquí podrías agregar más interactividad en el futuro si lo necesitas
+        console.log("¡Bienvenido a mi portafolio!");
+    </script>
+</body>
+</html>
