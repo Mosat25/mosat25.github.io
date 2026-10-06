@@ -11,15 +11,24 @@
     <!-- FontAwesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Tailwind Config for Formal Aesthetic -->
+    <!-- Tailwind Config with Dark Mode -->
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        primary: '#0f172a', // Dark slate blue (matching the footer)
-                        secondary: '#1e293b', // Slightly lighter slate for hovers
-                        accent: '#e2e8f0'
+                        dark: '#0f172a', // Footer & Light mode text
+                        analogous1: '#0284C7', // Ocean (Headings & Icons)
+                        analogous2: '#4338CA', // Deep Indigo (Strong Accents)
+                        cobalt: '#2563EB', // Electric Blue (Links & Interactive)
+                        
+                        // Dark mode specific colors for better contrast
+                        darkBg: '#0b1120', // Main background
+                        darkCard: '#1e293b', // Cards background
+                        darkAnalogous1: '#38BDF8', // Light Sky Blue for contrast
+                        darkAnalogous2: '#818CF8', // Light Indigo for contrast
+                        darkCobalt: '#60A5FA' // Bright Blue for dark mode links
                     }
                 }
             }
@@ -27,16 +36,11 @@
     </script>
 
     <style>
-        /* Incorporating a serif font for headings to give a highly formal and professional look */
-        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Inter:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
-        }
-
-        h1, h2, h3, h4, .serif {
-            font-family: 'Merriweather', serif;
         }
 
         .fade-in {
@@ -54,54 +58,159 @@
         .delay-300 { animation-delay: 450ms; }
     </style>
 </head>
-<body class="text-gray-800 min-h-screen flex flex-col antialiased">
+<body class="text-gray-800 dark:text-gray-200 dark:bg-darkBg min-h-screen flex flex-col antialiased transition-colors duration-300">
 
     <!-- Formal Navigation -->
-    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav class="bg-white dark:bg-darkBg dark:bg-dark border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20">
                 <div class="flex items-center">
-                    <span class="text-xl font-bold text-primary tracking-wide uppercase">Tomás Bertucelli</span>
+                    <span class="text-xl font-bold text-analogous2 dark:text-darkAnalogous2 tracking-wide uppercase">Tomás Bertucelli</span>
                 </div>
-                <div class="flex items-center space-x-8">
-                    <a href="#about" class="text-sm font-semibold text-gray-600 hover:text-primary transition-colors uppercase tracking-widest">About</a>
-                    <a href="#portfolio" class="text-sm font-semibold text-gray-600 hover:text-primary transition-colors uppercase tracking-widest">Portfolio</a>
-                    <a href="#contact" class="text-sm font-semibold text-gray-600 hover:text-primary transition-colors uppercase tracking-widest">Contact</a>
+                <!-- Navigation Links (hidden on very small screens for space) -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <button id="theme-toggle" type="button" class="flex items-center space-x-2 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-cobalt dark:hover:text-darkCobalt transition-colors uppercase tracking-widest focus:outline-none">
+                        <i id="theme-toggle-dark-icon" class="hidden fas fa-moon"></i>
+                        <span id="theme-toggle-dark-text" class="hidden">Dark Mode</span>
+                        <i id="theme-toggle-light-icon" class="hidden fas fa-sun"></i>
+                        <span id="theme-toggle-light-text" class="hidden">Light Mode</span>
+                    </button>
+                    <a href="#about" class="text-sm font-semibold text-gray-600 dark:text-gray-400 dark:text-gray-400 dark:text-gray-500 hover:text-cobalt dark:hover:text-darkCobalt dark:hover:text-darkCobalt transition-colors uppercase tracking-widest">About</a>
+                    <a href="#skills" class="text-sm font-semibold text-gray-600 dark:text-gray-400 dark:text-gray-400 dark:text-gray-500 hover:text-cobalt dark:hover:text-darkCobalt dark:hover:text-darkCobalt transition-colors uppercase tracking-widest">Skills</a>
+                    <a href="#experience" class="text-sm font-semibold text-gray-600 dark:text-gray-400 dark:text-gray-400 dark:text-gray-500 hover:text-cobalt dark:hover:text-darkCobalt dark:hover:text-darkCobalt transition-colors uppercase tracking-widest">Experience</a>
+                    <a href="#portfolio" class="text-sm font-semibold text-gray-600 dark:text-gray-400 dark:text-gray-400 dark:text-gray-500 hover:text-cobalt dark:hover:text-darkCobalt dark:hover:text-darkCobalt transition-colors uppercase tracking-widest">Portfolio</a>
+                    <a href="#education" class="text-sm font-semibold text-gray-600 dark:text-gray-400 dark:text-gray-400 dark:text-gray-500 hover:text-cobalt dark:hover:text-darkCobalt dark:hover:text-darkCobalt transition-colors uppercase tracking-widest">Education</a>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Professional Hero Section -->
-    <main id="about" class="flex-grow flex items-center justify-center pt-24 pb-32 px-4 sm:px-6 lg:px-8 bg-white">
+    <main id="about" class="flex-grow flex items-center justify-center pt-24 pb-32 px-4 sm:px-6 lg:px-8 bg-white dark:bg-darkBg">
         <div class="max-w-4xl text-center fade-in">
-            <h1 class="text-4xl sm:text-6xl font-bold text-primary tracking-tight mb-8 fade-in delay-100 leading-tight">
+            <h1 class="text-4xl sm:text-6xl font-bold text-analogous1 dark:text-darkAnalogous1 tracking-tight mb-8 fade-in delay-100 leading-tight">
                 Quality Assurance Analyst <br> & Game Tester
             </h1>
             
-            <p class="text-lg sm:text-xl text-gray-600 mb-12 fade-in delay-200 leading-relaxed max-w-2xl mx-auto">
-                Welcome. I am Tomás Bertucelli, a meticulous QA Tester specializing in the video game industry. I am committed to delivering flawless interactive experiences through rigorous manual testing, systematic bug tracking, and analytical review of core game mechanics.
+            <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-400 mb-12 fade-in delay-200 leading-relaxed max-w-2xl mx-auto">
+                Welcome. I am Tomás Bertucelli, a QA Tester specializing in the video game industry with a solid technical foundation in Systems Engineering. I combine rigorous manual testing, deep knowledge of software architecture, and automation tools to ensure flawless interactive experiences and robust game backend systems.
             </p>
-            
         </div>
     </main>
 
+    <!-- Technical Skills Section -->
+    <section id="skills" class="py-24 bg-gray-50 dark:bg-[#080d1a] border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold text-analogous1 dark:text-darkAnalogous1 mb-6">Technical Arsenal</h2>
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">My toolkit combines specialized game development environments with robust software QA methodologies and automation tech.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- QA & Testing -->
+                <div class="p-6 bg-white dark:bg-darkBg rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="text-analogous1 dark:text-darkAnalogous1 mb-4"><i class="fas fa-bug text-3xl"></i></div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">QA & Testing</h3>
+                    <ul class="space-y-2 text-gray-600 dark:text-gray-400">
+                        <li><i class="fas fa-check text-xs text-analogous1 dark:text-darkAnalogous1 mr-2"></i> Exploratory & Manual Testing</li>
+                        <li><i class="fas fa-check text-xs text-analogous1 dark:text-darkAnalogous1 mr-2"></i> API Testing (Postman)</li>
+                        <li><i class="fas fa-check text-xs text-analogous1 dark:text-darkAnalogous1 mr-2"></i> Mobile & Desktop Validation</li>
+                        <li><i class="fas fa-check text-xs text-analogous1 dark:text-darkAnalogous1 mr-2"></i> Bug Tracking (Jira)</li>
+                    </ul>
+                </div>
+                <!-- Game Dev & Tech -->
+                <div class="p-6 bg-white dark:bg-darkBg rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="text-analogous1 dark:text-darkAnalogous1 mb-4"><i class="fas fa-gamepad text-3xl"></i></div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Core Tech & Data</h3>
+                    <ul class="space-y-2 text-gray-600 dark:text-gray-400">
+                        <li><i class="fas fa-check text-xs text-analogous1 dark:text-darkAnalogous1 mr-2"></i> Unity 2D/3D</li>
+                        <li><i class="fas fa-check text-xs text-analogous1 dark:text-darkAnalogous1 mr-2"></i> SQL (Database Validation)</li>
+                        <li><i class="fas fa-check text-xs text-analogous1 dark:text-darkAnalogous1 mr-2"></i> Version Control (GitHub)</li>
+                        <li><i class="fas fa-check text-xs text-analogous1 dark:text-darkAnalogous1 mr-2"></i> Systems Architecture Logic</li>
+                    </ul>
+                </div>
+                <!-- Automation & AI -->
+                <div class="p-6 bg-white dark:bg-darkBg rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="text-analogous1 dark:text-darkAnalogous1 mb-4"><i class="fas fa-robot text-3xl"></i></div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Automation & AI</h3>
+                    <ul class="space-y-2 text-gray-600 dark:text-gray-400">
+                        <li><i class="fas fa-check text-xs text-analogous1 dark:text-darkAnalogous1 mr-2"></i> Workflow Automation (n8n)</li>
+                        <li><i class="fas fa-check text-xs text-analogous1 dark:text-darkAnalogous1 mr-2"></i> Containerization (Docker)</li>
+                        <li><i class="fas fa-check text-xs text-analogous1 dark:text-darkAnalogous1 mr-2"></i> AI Models Integration</li>
+                        <li><i class="fas fa-check text-xs text-analogous1 dark:text-darkAnalogous1 mr-2"></i> Process Optimization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Professional Experience Section -->
+    <section id="experience" class="py-24 bg-white dark:bg-darkBg border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold text-analogous1 dark:text-darkAnalogous1 mb-6">Professional QA Experience</h2>
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">Real-world software testing background that builds the foundation for rigorous logic verification and robust backend validations in games.</p>
+            </div>
+            
+            <div class="space-y-12 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-300 before:to-transparent">
+                
+                <!-- Accusys -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white dark:border-darkBg bg-analogous2 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-briefcase text-sm"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white dark:bg-darkBg p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
+                        <div class="flex flex-col sm:flex-row sm:justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">QA Analyst</h3>
+                            <span class="text-sm font-semibold text-analogous1 dark:text-darkAnalogous1 mt-1 sm:mt-0">Mar 2026 - Present</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">Accusys</h4>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                            Ensuring process stability through meticulous manual and exploratory testing. Specializing in SQL database validation and detailed bug tracking, applying logic structuring to identify critical errors effectively.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- SoftGuard Latam -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white dark:border-darkBg bg-analogous2 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-briefcase text-sm"></i>
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white dark:bg-darkBg p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
+                        <div class="flex flex-col sm:flex-row sm:justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">QA Analyst</h3>
+                            <span class="text-sm font-semibold text-analogous1 dark:text-darkAnalogous1 mt-1 sm:mt-0">Dec 2023 - Feb 2026</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">SoftGuard Latam</h4>
+                        <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 text-sm leading-relaxed">
+                            <li>Execution of manual tests on Mobile (Android/iOS) and Desktop platforms.</li>
+                            <li>API testing and verification via Postman, including log analysis.</li>
+                            <li>SQL queries for data integrity and result verification.</li>
+                            <li>Regression testing and continuous quality improvement processes.</li>
+                            <li>GitHub usage for code review and version tracking.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
     <!-- General Game Portfolio Section -->
-    <section id="portfolio" class="py-24 bg-gray-50 border-t border-gray-200">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="portfolio" class="py-24 bg-gray-50 dark:bg-[#080d1a] border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-20">
-                <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-6">Game Projects & QA Experience</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto text-lg">A comprehensive overview of titles I have tested and developed, focusing on mechanics, logic verification, and quality assurance processes.</p>
+                <h2 class="text-3xl sm:text-4xl font-bold text-analogous1 dark:text-darkAnalogous1 mb-6">Game Projects & QA Portfolio</h2>
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">A comprehensive overview of titles I have tested and developed, focusing on mechanics, logic verification, and quality assurance processes.</p>
             </div>
             
             <!-- Games Container (Separated by game) -->
             <div class="space-y-16">
                 
                 <!-- Game Project: ClawsTruction -->
-                <article class="bg-white rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center md:items-start">
+                <article class="bg-white dark:bg-darkBg rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center md:items-start">
                     
                     <!-- Project Image Container -->
-                    <div class="w-full md:w-1/3 rounded-2xl overflow-hidden shrink-0 border border-gray-200 shadow-sm">
+                    <div class="w-full md:w-1/3 rounded-2xl overflow-hidden shrink-0 border border-gray-200 dark:border-gray-700 shadow-sm">
                         <img src="https://img.itch.zone/aW1nLzMwNTM4ODY3LnBuZw==/315x250%23c/pXVFu7.png" alt="ClawsTruction Logo" class="w-full h-auto block">
                     </div>
                     
@@ -109,21 +218,21 @@
                     <div class="w-full md:w-2/3 flex flex-col justify-center">
                         <div class="flex justify-between items-start mb-4">
                             <div>
-                                <span class="text-xs font-bold tracking-widest text-primary uppercase mb-2 block">Merge Puzzle | Unity 2D</span>
-                                <h3 class="text-3xl font-bold text-gray-900">ClawsTruction</h3>
+                                <span class="text-xs font-bold tracking-widest text-analogous1 dark:text-darkAnalogous1 uppercase mb-2 block">Merge Puzzle | Unity 2D</span>
+                                <h3 class="text-3xl font-bold text-gray-900 dark:text-white">ClawsTruction</h3>
                             </div>
-                            <a href="https://mosat25.itch.io/clawstruction" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition-colors" title="View on itch.io">
+                            <a href="https://mosat25.itch.io/clawstruction" target="_blank" rel="noopener noreferrer" class="text-gray-400 dark:text-gray-500 hover:text-cobalt dark:hover:text-darkCobalt transition-colors" title="View on itch.io">
                                 <i class="fa-brands fa-itch-io text-4xl"></i>
                             </a>
                         </div>
                         
-                        <p class="text-gray-600 mb-6 leading-relaxed">
+                        <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
                             Developed as a prototype for the <strong>UTN Game Jam 2026</strong> by a 4-person team. ClawsTruction is a precision-based merge puzzle built in Unity, where players construct specific target figures by dropping objects via a moving claw. As a QA Tester and Co-Developer, I ensured the stability of core mechanics and the reliability of complex custom systems across the game's levels.
                         </p>
                         
                         <div class="mb-6">
-                            <h4 class="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wider">Key Systems & QA Focus</h4>
-                            <ul class="list-disc list-inside text-gray-600 space-y-2 text-sm leading-relaxed">
+                            <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-3 uppercase tracking-wider">Key Systems & QA Focus</h4>
+                            <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 text-sm leading-relaxed">
                                 <li><strong>Spawn Logic:</strong> Validation of dynamic prioritization queues for object generation across 3 distinct levels.</li>
                                 <li><strong>Physics Verification:</strong> Testing of collision boundaries, drop timing ranges, and trajectory limits within the Unity environment.</li>
                                 <li><strong>Algorithm Testing:</strong> Strict verification of the 100-point matching metric, accounting for proximity and rotation up to 45 degrees.</li>
@@ -132,9 +241,9 @@
                         </div>
                         
                         <div class="flex flex-wrap gap-3 mt-auto">
-                            <span class="px-4 py-1.5 bg-gray-100 text-gray-700 text-xs font-bold tracking-wide rounded-full border border-gray-200 uppercase">Unity Engine</span>
-                            <span class="px-4 py-1.5 bg-gray-100 text-gray-700 text-xs font-bold tracking-wide rounded-full border border-gray-200 uppercase">Game Jam</span>
-                            <span class="px-4 py-1.5 bg-gray-100 text-gray-700 text-xs font-bold tracking-wide rounded-full border border-gray-200 uppercase">Systems QA</span>
+                            <span class="px-4 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-bold tracking-wide rounded-full border border-gray-200 dark:border-gray-700 uppercase">Unity Engine</span>
+                            <span class="px-4 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-bold tracking-wide rounded-full border border-gray-200 dark:border-gray-700 uppercase">Game Jam</span>
+                            <span class="px-4 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-bold tracking-wide rounded-full border border-gray-200 dark:border-gray-700 uppercase">Systems QA</span>
                         </div>
                     </div>
                 </article>
@@ -145,12 +254,56 @@
         </div>
     </section>
 
+    <!-- Education Section -->
+    <section id="education" class="py-24 bg-white dark:bg-darkBg border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold text-analogous1 dark:text-darkAnalogous1 mb-6">Education & Certifications</h2>
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">A combination of systems engineering logic and specialized game production training.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- UTN Videojuegos -->
+                <div class="p-6 border border-gray-200 dark:border-gray-700 rounded-2xl hover:shadow-md transition-shadow">
+                    <span class="text-xs font-bold tracking-widest text-analogous1 dark:text-darkAnalogous1 uppercase mb-2 block">Aug 2026 - Present</span>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">Game Development & Production</h3>
+                    <h4 class="text-sm text-gray-500 dark:text-gray-400 mb-4">Centro de e-Learning UTN FRBA</h4>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">Specialized technical degree focusing on the full lifecycle of video game creation, from conception to final deployment.</p>
+                </div>
+                
+                <!-- UTN Sistemas -->
+                <div class="p-6 border border-gray-200 dark:border-gray-700 rounded-2xl hover:shadow-md transition-shadow">
+                    <span class="text-xs font-bold tracking-widest text-analogous1 dark:text-darkAnalogous1 uppercase mb-2 block">Mar 2024 - Present</span>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">Information Systems Engineering</h3>
+                    <h4 class="text-sm text-gray-500 dark:text-gray-400 mb-4">Universidad Tecnológica Nacional (UTN)</h4>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">Provides the logical structure and architectural understanding necessary to optimize and debug complex software systems.</p>
+                </div>
+                
+                <!-- Coderhouse AI -->
+                <div class="p-6 border border-gray-200 dark:border-gray-700 rounded-2xl hover:shadow-md transition-shadow">
+                    <span class="text-xs font-bold tracking-widest text-analogous1 dark:text-darkAnalogous1 uppercase mb-2 block">Apr 2026</span>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">Advanced AI Automation</h3>
+                    <h4 class="text-sm text-gray-500 dark:text-gray-400 mb-4">Coderhouse</h4>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">Certification in integrating AI models and designing process automation workflows to improve team productivity.</p>
+                </div>
+                
+                <!-- Coderhouse QA -->
+                <div class="p-6 border border-gray-200 dark:border-gray-700 rounded-2xl hover:shadow-md transition-shadow">
+                    <span class="text-xs font-bold tracking-widest text-analogous1 dark:text-darkAnalogous1 uppercase mb-2 block">Sep 2025</span>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">Manual QA & Software Quality</h3>
+                    <h4 class="text-sm text-gray-500 dark:text-gray-400 mb-4">Coderhouse</h4>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">Comprehensive training in software quality assurance methodologies, documentation, and industry best practices.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Formal Footer -->
-    <footer id="contact" class="bg-primary text-white py-20 border-t border-gray-800">
+    <footer id="contact" class="bg-dark text-white py-20 border-t border-gray-800">
         <div class="max-w-4xl mx-auto px-4 text-center">
             <h2 class="text-3xl font-bold mb-8">Professional Inquiries</h2>
             <p class="text-gray-400 mb-12 leading-relaxed max-w-2xl mx-auto">
-                I am actively seeking opportunities within the video game industry where I can leverage my testing expertise. Please feel free to reach out to discuss potential collaborations or request a formal resume.
+                I am actively seeking opportunities within the video game industry where I can leverage my QA expertise and technical background. Please feel free to reach out to discuss potential collaborations or request a formal resume.
             </p>
             
             <div class="flex flex-col items-center mb-16">
@@ -167,7 +320,7 @@
                 </div>
             </div>
             
-            <div class="border-t border-gray-700 pt-8 text-sm text-gray-500 tracking-widest uppercase">
+            <div class="border-t border-gray-700 pt-8 text-sm text-gray-500 dark:text-gray-400 tracking-widest uppercase">
                 <p>&copy; <span id="year"></span> Tomás Bertucelli. All Rights Reserved.</p>
             </div>
         </div>
@@ -175,6 +328,42 @@
 
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
+
+                // Dark mode logic
+        var themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        var themeToggleDarkText = document.getElementById('theme-toggle-dark-text');
+        var themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        var themeToggleLightText = document.getElementById('theme-toggle-light-text');
+
+        // Only default to dark if explicitly set in localStorage
+        if (localStorage.getItem('color-theme') === 'dark') {
+            themeToggleLightIcon.classList.remove('hidden');
+            themeToggleLightText.classList.remove('hidden');
+            document.documentElement.classList.add('dark');
+        } else {
+            themeToggleDarkIcon.classList.remove('hidden');
+            themeToggleDarkText.classList.remove('hidden');
+            document.documentElement.classList.remove('dark');
+        }
+
+        var themeToggleBtn = document.getElementById('theme-toggle');
+
+        themeToggleBtn.addEventListener('click', function() {
+            // toggle icons and text
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleDarkText.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
+            themeToggleLightText.classList.toggle('hidden');
+
+            // Toggle dark class and save
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+        });
     </script>
 </body>
 </html>
