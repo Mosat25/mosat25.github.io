@@ -1,0 +1,668 @@
+{
+  "name": "n8n_agenteEncuestador",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "moderacion-comentarios",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        96
+      ],
+      "id": "2d2debd4-c4e9-4027-868e-7652cff9b3d4",
+      "name": "Webhook",
+      "webhookId": "a20b4d92-2a81-48d2-a674-57ffe36a4ec2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "39a8ceca-a3f6-4f32-af77-59a27d91f5bc",
+              "name": "mailAdmin",
+              "value": "tomi.bertu2@gmail.com",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        96
+      ],
+      "id": "4939d28c-c3df-46a3-813a-210856e0cda0",
+      "name": "datosInicio"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cb53d45e-1503-4ae2-8aac-53f9565afc7c",
+              "name": "prompt",
+              "value": "=Clasifica este comentario: {{ $('Webhook').item.json.body.comentario }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        96
+      ],
+      "id": "3af792ab-e731-4cef-abb7-45d709c1c916",
+      "name": "promptClasificador"
+    },
+    {
+      "parameters": {
+        "model": "gemma3:4b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        672,
+        256
+      ],
+      "id": "a718e84c-466c-44ea-a0fd-88fde29056f3",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "eClu81BrMeinfIY8",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "POSITIVO",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "dbdad60d-a87b-4d2d-9633-084589cdb2a7"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "POSITIVO"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "432700b0-a848-4453-a93d-0867def509d5",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "NEUTRAL",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "NEUTRAL"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "e4810fac-e64b-4908-a8fd-ba72896ee66e",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "NEGATIVO",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "NEGATIVO"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1024,
+        -32
+      ],
+      "id": "46173799-4afb-4a53-a7cb-bbcb95af8ebb",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "model": "qwen3.5:4b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        1472,
+        336
+      ],
+      "id": "ddf0b5ba-37a0-4106-9873-b6493f298d49",
+      "name": "Ollama Chat Model1",
+      "credentials": {
+        "ollamaApi": {
+          "id": "eClu81BrMeinfIY8",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}",
+        "options": {
+          "systemMessage": "Actúa como un clasificador de texto estricto. Tu objetivo es analizar el sentimiento del comentario de un usuario. Responde ÚNICAMENTE con una de estas tres palabras en mayúsculas: POSITIVO, NEUTRAL o NEGATIVO. No añadas explicaciones ni puntuación."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        672,
+        96
+      ],
+      "id": "7e47ced2-c128-4555-b26d-b52be376ea83",
+      "name": "Clasificador",
+      "retryOnFail": true,
+      "executeOnce": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4985d365-04a5-4eaa-982f-dc0d0f635bef",
+              "name": "prompt",
+              "value": "=Analiza este comentario: {{ $('Webhook').item.json.body.comentario }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1248,
+        176
+      ],
+      "id": "9f5a4d37-c4a9-492f-b630-62b9cf5bddc5",
+      "name": "promptAnalisis"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"resumen\": \"Resumen del comentario\",\n\t\"causa\": \"Causa\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1648,
+        336
+      ],
+      "id": "fe4ea0df-b15d-4a3d-ac64-17a12e97a5a9",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.mail }}",
+        "subject": "=¡Gracias por tu comentario, {{ $('Webhook').item.json.body.nombre }}! ✨",
+        "message": "=<p>Hola <b>{{ $('Webhook').item.json.body.nombre }}</b>,</p> <p>Hemos recibido tus comentarios sobre nuestro servicio:</p> <blockquote style=\"font-style: italic; color: #555;\">   \"{{ $('Webhook').item.json.body.comentario }}\" </blockquote> <p>¡Nos alegra muchísimo saber que tuviste una buena experiencia! Nos motiva a seguir mejorando día a día.</p> <p>Si tienes un momento, nos encantaría que compartas tu opinión en nuestras redes sociales.</p> <p>Saludos,<br>El equipo de Experiencia al Cliente.</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1248,
+        -208
+      ],
+      "id": "81db1648-e40c-46ad-8715-8971a8f2e298",
+      "name": "Agradecimiento",
+      "webhookId": "f0f2046d-7c33-49b0-9ddd-f1ed645f4851",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ezMjYnaw1q1VCoJA",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.mail }}",
+        "subject": "=Feedback recibido - Queremos saber más, {{ $('Webhook').item.json.body.nombre }}",
+        "message": "=<p>Hola <b>{{ $('Webhook').item.json.body.nombre }}</b>,</p>\n<p>Gracias por hacernos llegar tus observaciones:</p>\n<blockquote style=\"font-style: italic; color: #555;\">\n  \"{{ $('Webhook').item.json.body.comentario }}\"\n</blockquote>\n<p>Apreciamos tu honestidad. Nos gustaría saber si hay algo específico que podríamos haber hecho mejor para que tu experiencia fuera excelente.</p>\n<p>Quedamos a tu disposición para cualquier detalle adicional que quieras comentarnos.</p>\n<p>Atentamente,<br>Equipo de Calidad.</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1248,
+        -16
+      ],
+      "id": "d4066aae-f92c-4687-ab46-648a1b5ace1f",
+      "name": "Mejora Continua",
+      "webhookId": "f0f2046d-7c33-49b0-9ddd-f1ed645f4851",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ezMjYnaw1q1VCoJA",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('datosInicio').item.json.mailAdmin }}",
+        "subject": "=⚠️ ALERTA: Comentario Negativo de {{ $('Webhook').item.json.body.nombre }} {{ $('Webhook').item.json.body.apellido }}",
+        "message": "=<h2 style=\"color: #d9534f;\">Se ha detectado una incidencia crítica</h2>\n<p><b>Cliente:</b> {{ $('Webhook').item.json.body.nombre }} {{ $('Webhook').item.json.body.apellido }} ({{ $('Webhook').item.json.body.mail }})</p>\n<p><b>Comentario original:</b></p>\n<div style=\"background: #f9f9f9; padding: 10px; border-left: 5px solid #d9534f;\">\n  \"{{ $('Webhook').item.json.body.comentario }}\"\n</div>\n\n<h3>Análisis de Inteligencia Artificial:</h3>\n<ul>\n  <li><b>Resumen del problema:</b> {{ $json.output.resumen }}</li>\n  <li><b>Causa raíz identificada:</b> {{ $json.output.causa }}</li>\n</ul>\n\n<p><b>Acción requerida:</b> El equipo de soporte debe contactar al cliente en menos de 2 horas para gestionar la solución.</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1824,
+        96
+      ],
+      "id": "ab5b115c-00d1-451d-b2c5-4292f7b77ab0",
+      "name": "Alerta y Resumen",
+      "webhookId": "f0f2046d-7c33-49b0-9ddd-f1ed645f4851",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ezMjYnaw1q1VCoJA",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Eres un experto en atención al cliente. Analiza el comentario negativo del usuario y genera un JSON con dos campos:\n\n\"resumen\": Un resumen de no más de 10 palabras sobre la queja.\n\"causa\": La razón principal del descontento en una palabra (ej: Precio, Calidad, Demora).\n\nResponde solo el JSON."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1472,
+        176
+      ],
+      "id": "96baff27-cfb8-4f28-9b8b-6f5c7241b07d",
+      "name": "Análisis y Resumen",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('datosInicio').item.json.mailAdmin }}",
+        "subject": "⚠️ ALERTA: Error en Workflow",
+        "message": "=<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <style>\n        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f7; color: #333; margin: 0; padding: 0; }\n        .container { max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #e1e1e1; }\n        .header { background-color: #ff4b4b; color: white; padding: 20px; text-align: center; }\n        .content { padding: 30px; }\n        .status-badge { display: inline-block; background: #ffebeb; color: #d93025; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; margin-bottom: 15px; }\n        .details-table { width: 100%; border-collapse: collapse; margin: 20px 0; }\n        .details-table td { padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }\n        .label { font-weight: bold; color: #666; width: 30%; }\n        .error-box { background: #f8f9fa; border-left: 4px solid #ff4b4b; padding: 15px; font-family: monospace; font-size: 13px; color: #d00; word-break: break-all; }\n        .button { display: block; width: 200px; margin: 30px auto; padding: 12px; background-color: #ff4b4b; color: white; text-align: center; text-decoration: none; border-radius: 5px; font-weight: bold; }\n        .footer { background: #f4f4f7; color: #888; text-align: center; padding: 15px; font-size: 12px; }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <div class=\"header\">\n            <h1 style=\"margin:0;\">🚨 Error en Workflow</h1>\n        </div>\n        <div class=\"content\">\n            <div class=\"status-badge\">NODO LLM FALLIDO</div>\n            <p>Se ha detectado una interrupción en la ejecución del flujo de trabajo debido a un error crítico en el nodo de Inteligencia Artificial.</p>\n            \n            <table class=\"details-table\">\n                <tr>\n                    <td class=\"label\">Workflow:</td>\n                    <td>{{ $workflow.name }}</td>\n                </tr>\n                <tr>\n                    <td class=\"label\">ID Ejecución:</td>\n                    <td>{{ $executionId }}</td>\n                </tr>\n                <tr>\n                    <td class=\"label\">Nodo:</td>\n                    <td>Clasificador</td>\n                </tr>\n                <tr>\n                    <td class=\"label\">Fecha/Hora:</td>\n                    <td>{{ $now }}</td>\n                </tr>\n            </table>\n\n            <p><strong>Detalle del error:</strong></p>\n            <div class=\"error-box\">\n                {{ $json.error }}\n            </div>\n\n            <a href=\"http://localhost:5678/execution/{{ $executionId }}\" class=\"button\">Ver en n8n</a>\n        </div>\n        <div class=\"footer\">\n            Este es un mensaje automático generado por n8n.\n        </div>\n    </div>\n</body>\n</html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1024,
+        192
+      ],
+      "id": "8b691f41-4c25-4d58-9503-603d277d0979",
+      "name": "Error Clasificador",
+      "webhookId": "b480bc69-05de-41d7-a6de-a700c428a468",
+      "alwaysOutputData": false,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ezMjYnaw1q1VCoJA",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('datosInicio').item.json.mailAdmin }}",
+        "subject": "⚠️ ALERTA: Error en Workflow",
+        "message": "=<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <style>\n        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f7; color: #333; margin: 0; padding: 0; }\n        .container { max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #e1e1e1; }\n        .header { background-color: #ff4b4b; color: white; padding: 20px; text-align: center; }\n        .content { padding: 30px; }\n        .status-badge { display: inline-block; background: #ffebeb; color: #d93025; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; margin-bottom: 15px; }\n        .details-table { width: 100%; border-collapse: collapse; margin: 20px 0; }\n        .details-table td { padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }\n        .label { font-weight: bold; color: #666; width: 30%; }\n        .error-box { background: #f8f9fa; border-left: 4px solid #ff4b4b; padding: 15px; font-family: monospace; font-size: 13px; color: #d00; word-break: break-all; }\n        .button { display: block; width: 200px; margin: 30px auto; padding: 12px; background-color: #ff4b4b; color: white; text-align: center; text-decoration: none; border-radius: 5px; font-weight: bold; }\n        .footer { background: #f4f4f7; color: #888; text-align: center; padding: 15px; font-size: 12px; }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <div class=\"header\">\n            <h1 style=\"margin:0;\">🚨 Error en Workflow</h1>\n        </div>\n        <div class=\"content\">\n            <div class=\"status-badge\">NODO LLM FALLIDO</div>\n            <p>Se ha detectado una interrupción en la ejecución del flujo de trabajo debido a un error crítico en el nodo de Inteligencia Artificial.</p>\n            \n            <table class=\"details-table\">\n                <tr>\n                    <td class=\"label\">Workflow:</td>\n                    <td>{{ $workflow.name }}</td>\n                </tr>\n                <tr>\n                    <td class=\"label\">ID Ejecución:</td>\n                    <td>{{ $executionId }}</td>\n                </tr>\n                <tr>\n                    <td class=\"label\">Nodo:</td>\n                    <td>Análisis y Resumen</td>\n                </tr>\n                <tr>\n                    <td class=\"label\">Fecha/Hora:</td>\n                    <td>{{ $now }}</td>\n                </tr>\n            </table>\n\n            <p><strong>Detalle del error:</strong></p>\n            <div class=\"error-box\">\n                {{ $json.error }}\n            </div>\n\n            <a href=\"http://localhost:5678/execution/{{ $executionId }}\" class=\"button\">Ver en n8n</a>\n        </div>\n        <div class=\"footer\">\n            Este es un mensaje automático generado por n8n.\n        </div>\n    </div>\n</body>\n</html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1824,
+        288
+      ],
+      "id": "783c902c-3890-4f0a-9408-a7b5d2b09021",
+      "name": "Error A&R",
+      "webhookId": "b480bc69-05de-41d7-a6de-a700c428a468",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ezMjYnaw1q1VCoJA",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Inicio\nAquí se reciben y definen los parámetros **iniciales** del workflow, como el mail de adminitrador.",
+        "height": 256,
+        "width": 400
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -48,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "f799165c-68a7-410b-90a4-62cb06d91254",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Clasificación de Comentarios\nSe **crea el prompt** y la **IA de clasificación** decide que tipo de comentario se recibió, y por que rama debe seguir.\n\nLas ramas posibles son: **POSITIVO**, **NEUTRO** y **NEGATIVO**.",
+        "height": 432,
+        "width": 560,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        400,
+        -48
+      ],
+      "typeVersion": 1,
+      "id": "1e1d32f8-9c19-4eef-a0aa-e5ab741ad766",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Switch\nSe redirige el comentario según su clasificación.",
+        "height": 304,
+        "width": 208,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        992,
+        -144
+      ],
+      "typeVersion": 1,
+      "id": "930d62bb-4e1f-4421-aec3-983652d0b9ba",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n## Análisis y Resumen de Comentarios\nSe **crea el prompt** y la **IA de análisis y resumen** arma un JSON con dichos datos para luego **enviar un mail** de alerta al administrador.",
+        "height": 432,
+        "width": 560,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1216,
+        144
+      ],
+      "typeVersion": 1,
+      "id": "eb9995e5-5648-4bbf-b5bd-7f505263e525",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Mensajes\nMail de agradecimiento o mejora al usuario.",
+        "height": 480,
+        "width": 160,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1216,
+        -336
+      ],
+      "typeVersion": 1,
+      "id": "f3f31f13-a09a-4e2a-88a8-7b323a305437",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Alerta\nMail al administrador con alerta por comentario negativo.",
+        "height": 320,
+        "width": 160,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1792,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "6c7b951f-3e89-4fff-a217-5f785f8f7f3a",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n## Error \nMail al administrador con mensaje de error en el workflow.",
+        "height": 304,
+        "width": 160,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1792,
+        272
+      ],
+      "typeVersion": 1,
+      "id": "2abe3ee6-4812-4bb2-838f-18217b41de0f",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n## Error \nMail al administrador con mensaje de error en el workflow.",
+        "height": 304,
+        "width": 160,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        992,
+        176
+      ],
+      "typeVersion": 1,
+      "id": "0f5fb8fb-b544-4941-b8e7-eb095e5b4800",
+      "name": "Sticky Note7"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "datosInicio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "datosInicio": {
+      "main": [
+        [
+          {
+            "node": "promptClasificador",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "promptClasificador": {
+      "main": [
+        [
+          {
+            "node": "Clasificador",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Clasificador",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Análisis y Resumen",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clasificador": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error Clasificador",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Agradecimiento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mejora Continua",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "promptAnalisis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "promptAnalisis": {
+      "main": [
+        [
+          {
+            "node": "Análisis y Resumen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Análisis y Resumen",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Análisis y Resumen": {
+      "main": [
+        [
+          {
+            "node": "Alerta y Resumen",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error A&R",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "86750dd9-7bc1-4f6a-a765-4fb24752121b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c4c5cab3aed4536013f8579db6427c2e44be6cd968c9a910e1ac8cc9ea74ad14"
+  },
+  "id": "aq6hgBUkWyy3bwSd0Hb50",
+  "tags": []
+}
